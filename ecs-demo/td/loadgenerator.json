@@ -4,47 +4,62 @@
     "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "containerDefinitions": [
-      {
-        "name": "frontend-check",
-        "image": "busybox:latest",
-        "cpu": 100,
-        "memory": 128,
-        "command": [
-          "/bin/sh",
-          "-exc",
-          "echo 'Init container pinging frontend: ${FRONTEND_ADDR}...'; STATUSCODE=$(wget --server-response http://${FRONTEND_ADDR} 2>&1 | awk '/^  HTTP/{print $2}'); if test $STATUSCODE -ne 200; then echo 'Error: Could not reach frontend - Status code: ${STATUSCODE}'; exit 1; fi"
-        ],
-        "essential": false,
-        "environment": [
-          {
-            "name": "FRONTEND_ADDR",
-            "value": "frontend:80"
-          }
-        ]
-      },
-      {
-        "name": "main",
-        "image": "gcr.io/google-samples/microservices-demo/loadgenerator:v0.3.8",
-        "cpu": 500,
-        "memory": 512,
-        "memoryReservation": 256,
-        "essential": true,
-        "environment": [
-          {
-            "name": "FRONTEND_ADDR",
-            "value": "frontend:80"
-          },
-          {
-            "name": "USERS",
-            "value": "10"
-          }
-        ]
-      }
+        {
+            "name": "frontend-check",
+            "image": "busybox:latest",
+            "cpu": 100,
+            "memory": 128,
+            "command": [
+                "/bin/sh",
+                "-exc",
+                "echo 'Init container pinging frontend: ${FRONTEND_ADDR}...'; STATUSCODE=$(wget --server-response http://${FRONTEND_ADDR} 2>&1 | awk '/^  HTTP/{print $2}'); if test $STATUSCODE -ne 200; then echo 'Error: Could not reach frontend - Status code: ${STATUSCODE}'; exit 1; fi"
+            ],
+            "essential": false,
+            "environment": [
+                {
+                    "name": "FRONTEND_ADDR",
+                    "value": "frontend.boutique.local:80"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/loadgenerator",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "frontend-check"
+                }
+            }
+        },
+        {
+            "name": "main",
+            "image": "gcr.io/google-samples/microservices-demo/loadgenerator:v0.3.8",
+            "cpu": 500,
+            "memory": 512,
+            "memoryReservation": 256,
+            "essential": true,
+            "environment": [
+                {
+                    "name": "FRONTEND_ADDR",
+                    "value": "frontend.boutique.local:80"
+                },
+                {
+                    "name": "USERS",
+                    "value": "10"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/loadgenerator",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "main"
+                }
+            }
+        }
     ],
     "requiresCompatibilities": [
-      "FARGATE"
+        "FARGATE"
     ],
     "cpu": "1024",
     "memory": "2048"
-  }
-  
+}

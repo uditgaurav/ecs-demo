@@ -45,6 +45,14 @@
           "timeout": 5,
           "interval": 5,
           "startPeriod": 60
+        },
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "/ecs/shippingservice",
+                "awslogs-region": "us-east-2",
+                "awslogs-stream-prefix": "ecs"
+            }
         }
       }
     ],

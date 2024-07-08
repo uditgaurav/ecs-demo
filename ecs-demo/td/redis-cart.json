@@ -1,38 +1,45 @@
 {
-    "family": "redis-cart",
-    "taskRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
-    "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
-    "networkMode": "awsvpc",
-    "containerDefinitions": [
+  "family": "redis-cart",
+  "taskRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
       {
-        "name": "redis",
-        "image": "redis:alpine",
-        "cpu": 125,
-        "memory": 256,
-        "portMappings": [
-          {
-            "containerPort": 6379,
-            "hostPort": 6379,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true,
-        "healthCheck": {
-          "retries": 3,
-          "command": [
-            "CMD-SHELL",
-            "redis-cli ping || exit 1"
+          "name": "redis",
+          "image": "redis:alpine",
+          "cpu": 125,
+          "memory": 256,
+          "portMappings": [
+              {
+                  "containerPort": 6379,
+                  "hostPort": 6379,
+                  "protocol": "tcp"
+              }
           ],
-          "timeout": 5,
-          "interval": 5,
-          "startPeriod": 60
-        }
+          "essential": true,
+          "healthCheck": {
+              "retries": 3,
+              "command": [
+                  "CMD-SHELL",
+                  "redis-cli ping || exit 1"
+              ],
+              "timeout": 5,
+              "interval": 5,
+              "startPeriod": 60
+          },
+          "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                  "awslogs-group": "/ecs/redis-cart",
+                  "awslogs-region": "us-east-2",
+                  "awslogs-stream-prefix": "ecs"
+              }
+          }
       }
-    ],
-    "requiresCompatibilities": [
+  ],
+  "requiresCompatibilities": [
       "FARGATE"
-    ],
-    "cpu": "256",
-    "memory": "512"
-  }
-  
+  ],
+  "cpu": "256",
+  "memory": "512"
+}

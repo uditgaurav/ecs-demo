@@ -1,45 +1,4 @@
 {
-    "family": "cartservice",
-    "taskRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
-    "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
-    "networkMode": "awsvpc",
-    "containerDefinitions": [
-      {
-        "name": "cartservice",
-        "image": "gcr.io/google-samples/microservices-demo/cartservice:v0.3.8",
-        "cpu": 300,
-        "memory": 128,
-        "memoryReservation": 64,
-        "portMappings": [
-          {
-            "containerPort": 7070,
-            "hostPort": 7070,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true,
-        "environment": [
-          {
-            "name": "REDIS_ADDR",
-            "value": "redis-cart:6379"
-          }
-        ],
-        "healthCheck": {
-          "retries": 3,
-          "command": [
-            "CMD-SHELL",
-            "/bin/grpc_health_probe -addr=:7070 -rpc-timeout=5s"
-          ],
-          "timeout": 5,
-          "interval": 10,
-          "startPeriod": 60
-        }
-      }
-    ],
-    "requiresCompatibilities": [
-      "FARGATE"
-    ],
-    "cpu": "512",
-    "memory": "1024"
-  }
-  
+    "name": "CART_SERVICE_ADDR",
+    "value": "cartservice,:boutique.local7070"
+},

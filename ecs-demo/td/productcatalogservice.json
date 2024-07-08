@@ -4,54 +4,61 @@
     "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "containerDefinitions": [
-      {
-        "name": "productcatalogservice",
-        "image": "gcr.io/google-samples/microservices-demo/productcatalogservice:v0.3.8",
-        "cpu": 200,
-        "memory": 128,
-        "memoryReservation": 64,
-        "portMappings": [
-          {
-            "containerPort": 3550,
-            "hostPort": 3550,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true,
-        "environment": [
-          {
-            "name": "PORT",
-            "value": "3550"
-          },
-          {
-            "name": "DISABLE_STATS",
-            "value": "1"
-          },
-          {
-            "name": "DISABLE_TRACING",
-            "value": "1"
-          },
-          {
-            "name": "DISABLE_PROFILER",
-            "value": "1"
-          }
-        ],
-        "healthCheck": {
-          "retries": 3,
-          "command": [
-            "CMD-SHELL",
-            "/bin/grpc_health_probe -addr=:3550"
-          ],
-          "timeout": 5,
-          "interval": 5,
-          "startPeriod": 60
+        {
+            "name": "productcatalogservice",
+            "image": "gcr.io/google-samples/microservices-demo/productcatalogservice:v0.3.8",
+            "cpu": 200,
+            "memory": 128,
+            "memoryReservation": 64,
+            "portMappings": [
+                {
+                    "containerPort": 3550,
+                    "hostPort": 3550,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "PORT",
+                    "value": "3550"
+                },
+                {
+                    "name": "DISABLE_STATS",
+                    "value": "1"
+                },
+                {
+                    "name": "DISABLE_TRACING",
+                    "value": "1"
+                },
+                {
+                    "name": "DISABLE_PROFILER",
+                    "value": "1"
+                }
+            ],
+            "healthCheck": {
+                "retries": 3,
+                "command": [
+                    "CMD-SHELL",
+                    "/bin/grpc_health_probe -addr=:3550"
+                ],
+                "timeout": 5,
+                "interval": 5,
+                "startPeriod": 60
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/productcatalogservice",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
         }
-      }
     ],
     "requiresCompatibilities": [
-      "FARGATE"
+        "FARGATE"
     ],
     "cpu": "256",
     "memory": "512"
-  }
-  
+}

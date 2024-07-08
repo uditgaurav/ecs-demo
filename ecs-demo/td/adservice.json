@@ -4,50 +4,57 @@
     "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "containerDefinitions": [
-      {
-        "name": "adservice",
-        "image": "gcr.io/google-samples/microservices-demo/adservice:v0.3.8",
-        "cpu": 300,
-        "memory": 300,
-        "memoryReservation": 180,
-        "portMappings": [
-          {
-            "containerPort": 9555,
-            "hostPort": 9555,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true,
-        "environment": [
-          {
-            "name": "PORT",
-            "value": "9555"
-          },
-          {
-            "name": "DISABLE_STATS",
-            "value": "1"
-          },
-          {
-            "name": "DISABLE_TRACING",
-            "value": "1"
-          }
-        ],
-        "healthCheck": {
-          "retries": 3,
-          "command": [
-            "CMD-SHELL",
-            "/bin/grpc_health_probe -addr=:9555"
-          ],
-          "timeout": 5,
-          "interval": 15,
-          "startPeriod": 60
+        {
+            "name": "adservice",
+            "image": "gcr.io/google-samples/microservices-demo/adservice:v0.3.8",
+            "cpu": 300,
+            "memory": 300,
+            "memoryReservation": 180,
+            "portMappings": [
+                {
+                    "containerPort": 9555,
+                    "hostPort": 9555,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "PORT",
+                    "value": "9555"
+                },
+                {
+                    "name": "DISABLE_STATS",
+                    "value": "1"
+                },
+                {
+                    "name": "DISABLE_TRACING",
+                    "value": "1"
+                }
+            ],
+            "healthCheck": {
+                "retries": 3,
+                "command": [
+                    "CMD-SHELL",
+                    "/bin/grpc_health_probe -addr=:9555"
+                ],
+                "timeout": 5,
+                "interval": 15,
+                "startPeriod": 60
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/adservice",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
         }
-      }
     ],
     "requiresCompatibilities": [
-      "FARGATE"
+        "FARGATE"
     ],
     "cpu": "512",
     "memory": "1024"
-  }
-  
+}
