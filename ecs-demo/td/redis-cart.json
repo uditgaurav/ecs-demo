@@ -1,0 +1,38 @@
+{
+    "family": "redis-cart",
+    "taskRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::149554801296:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+      {
+        "name": "redis",
+        "image": "redis:alpine",
+        "cpu": 125,
+        "memory": 256,
+        "portMappings": [
+          {
+            "containerPort": 6379,
+            "hostPort": 6379,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "healthCheck": {
+          "retries": 3,
+          "command": [
+            "CMD-SHELL",
+            "redis-cli ping || exit 1"
+          ],
+          "timeout": 5,
+          "interval": 5,
+          "startPeriod": 60
+        }
+      }
+    ],
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512"
+  }
+  
